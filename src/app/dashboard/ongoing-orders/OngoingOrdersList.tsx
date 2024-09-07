@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { OngoingOrdersCard } from './_components/OngoingOrdersCard';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getOrdersData } from '@/api/db';
 
 interface orderItem {
@@ -21,10 +21,6 @@ interface ongoingOrdersItem {
   queue_order: boolean;
 }
 
-interface ongoingOrders {
-  ongoingOrders: Array<ongoingOrdersItem>;
-}
-
 export const OngoingOrdersList = () => {
   const [ongoingOrdersData, setOngoingOrdersData] = useState<ongoingOrdersItem[]>([]);
 
@@ -38,7 +34,8 @@ export const OngoingOrdersList = () => {
     }
 
     fetchOngoingOrders();
-  }, [])
+  }, [ongoingOrdersData]);
+
   return (
     <div className='ongoing-orders-list'>
       <div className='ongoing-orders-list__content'>

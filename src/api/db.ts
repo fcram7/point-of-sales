@@ -9,11 +9,11 @@ interface orderObject {
 
 interface orders {
   orderId: string;
-  customerName: string;
-  order: orderObject[];
-  total: number;
-  payment: string;
-  queueOrder: boolean;
+  customerName?: string;
+  order?: orderObject[];
+  total?: number;
+  payment?: string;
+  queueOrder?: boolean;
 }
 
 export const getItemData = async () => {
@@ -25,9 +25,7 @@ export const getItemData = async () => {
 };
 
 export const getOrdersData = async () => {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('*');
+  const { data, error } = await supabase.from('orders').select('*').eq('queue_order', true);
 
   if (error) {
     console.error('Error fetching orders data: ', error.message);
@@ -45,32 +43,39 @@ export const setOrderData = async ({
   payment,
   queueOrder,
 }: orders) => {
-  const { data, error } = await supabase
-    .from('orders')
-    .insert({
-      order_id: orderId,
-      customer_name: customerName,
-      order: [
-        {
-          ...order,
-        },
-      ],
-      total: total,
-      payment: payment,
-      queue_order: queueOrder,
-    });
+  const { data, error } = await supabase.from('orders').insert({
+    order_id: orderId,
+    customer_name: customerName,
+    order: [
+      {
+        ...order,
+      },
+    ],
+    total: total,
+    payment: payment,
+    queue_order: queueOrder,
+  });
 
   return { data, error };
 };
 
-export const updateQueueOrder = async (orderId: string, queueOrder: boolean) => {
+export const updateQueueOrder = async ({ orderId, queueOrder }: orders) => {
   const { data, error } = await supabase
     .from('orders')
     .update({
-      queue_order: queueOrder,
+      queue_order: queueOrder
     })
     .eq('order_id', orderId)
     .select();
 
-  return { data, error };
+  if(error) {
+    console.error('Error:', error);
+
+    return { data: null, error }
+  }
+
+  console.log('updated data: ', data);
+  return { data, error: null };
+    
+
 };
