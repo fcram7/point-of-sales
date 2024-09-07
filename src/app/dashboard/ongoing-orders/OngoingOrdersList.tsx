@@ -42,7 +42,7 @@ export const OngoingOrdersList = () => {
         <h1 className='xl:text-3xl font-semibold mb-6'>Ongoing Orders</h1>
         <Link className='xl:text-xl' href={`/dashboard`}>Back to menu</Link>
         <div className="ongoing-orders-list__order-card-container mt-6 grid gap-4">
-          {ongoingOrdersData && ongoingOrdersData.map((order, index) => (
+          {ongoingOrdersData.length > 0 ? (ongoingOrdersData.map((order, index) => (
             <OngoingOrdersCard
               orderId={order.order_id}
               customerName={order.customer_name}
@@ -52,7 +52,9 @@ export const OngoingOrdersList = () => {
               queueOrder={order.queue_order}
               key={index}
             />
-          ))}
+          ))) : (
+            <p className='xl:text-2xl'>No order queued</p>
+          )}
         </div>
       </div>
     </div>
