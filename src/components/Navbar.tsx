@@ -40,6 +40,13 @@ export const Navbar = () => {
     return () => authListener.subscription.unsubscribe();
   }, []);
 
+  const onAllMenusHandler = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    router.push('/dashboard/all-menus');
+  }
+
   const onLogoutHandler = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -79,7 +86,7 @@ export const Navbar = () => {
                     <div className='navbar-section__navmenu-content w-48'>
                       <ul className='navbar-section__navmenu-link-container px-4 py-2 grid gap-4'>
                         <li>
-                          <NavigationMenuLink asChild>
+                          <NavigationMenuLink asChild onClick={onAllMenusHandler}>
                             <div className='cursor-pointer xl:text-md'>All Menus</div>
                           </NavigationMenuLink>
                         </li>
