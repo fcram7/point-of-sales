@@ -3,9 +3,10 @@
 import { categoryStore } from '@/utils/zustand/itemCategory';
 import { MenuCard } from './MenuCard';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OrderModal } from './OrderModal';
 import { orderStore } from '@/utils/zustand/order';
+import { getItemData } from '@/api/db';
 
 interface item {
   id: number;
@@ -18,10 +19,25 @@ interface filteredMenuItem {
   menuItem: Array<item>;
 }
 
-export const MenuList = ({ menuItem }: filteredMenuItem) => {
+export const MenuList = () => {
   const { itemCategory } = categoryStore();
   const { order, setTotal } = orderStore();
+  const [menuItem, setMenuItem] = useState<item[]>([])
   const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    const fetchAllMenus = async () => {
+      const { data, error } = await getItemData();
+
+      if (error) {
+        console.error('Error fetching data: ', error.message);
+      }
+
+      setMenuItem(data as item[]);
+    }
+
+    fetchAllMenus();
+  }, []);
 
   const inputButtonHandler = () => {
     let totalAmount = order.reduce((acc, item) => acc + item.orderTotal, 0);
