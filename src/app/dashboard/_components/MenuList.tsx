@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { OrderModal } from './OrderModal';
 import { orderStore } from '@/utils/zustand/order';
 import { getItemData } from '@/api/db';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 interface item {
   id: number;
@@ -15,15 +16,10 @@ interface item {
   item_category: string;
 }
 
-interface filteredMenuItem {
-  menuItem: Array<item>;
-}
-
 export const MenuList = () => {
   const { itemCategory } = categoryStore();
   const { order, setTotal } = orderStore();
   const [menuItem, setMenuItem] = useState<item[]>([])
-  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const fetchAllMenus = async () => {
@@ -43,11 +39,9 @@ export const MenuList = () => {
     let totalAmount = order.reduce((acc, item) => acc + item.orderTotal, 0);
 
     setTotal(totalAmount);
-    setModal(true);
   };
 
   const cancelButtonHandler = () => {
-    setModal(false);
     location.reload();
   };
 
@@ -71,20 +65,26 @@ export const MenuList = () => {
         <p>No data!</p>
       )}
 
-      <Button
-        onClick={inputButtonHandler}
-        disabled={order.length > 0 ? false : true}
-        className='fixed menu-section__input-order-btn bottom-5 right-10'
-      >
-        Input Order
-      </Button>
-      {modal && order.length > 0 ? (
-        <div className='menu-section__modal-wrapper flex justify-center'>
-          <OrderModal cancelButtonHandler={cancelButtonHandler} />
-        </div>
-      ) : (
-        ''
-      )}
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            onClick={inputButtonHandler}
+            disabled={order.length > 0 ? false : true}
+            className='fixed menu-section__input-order-btn bottom-5 right-10'
+          >
+            Input Order
+          </Button>
+        </DialogTrigger>
+        <DialogContent className='max-w-lg bg-secondary'>
+          {order.length > 0 ? (
+            <div className='menu-section__modal-wrapper flex justify-center'>
+              <OrderModal cancelButtonHandler={cancelButtonHandler} />
+            </div>
+          ) : (
+            ''
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
