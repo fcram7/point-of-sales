@@ -15,12 +15,8 @@ interface item {
 
 export const MenuCard = ({ itemName, itemPrice }: item) => {
   const [itemAmount, setItemAmount] = useState(0);
-  const { order, setOrder, setTotal } = orderStore();
+  const { setOrder } = orderStore();
   const { toast } = useToast();
-
-  // useEffect(() => {
-  //   console.log('current orders:', order);
-  // }, [order]);
 
   const addItemHandler = () => {
     setItemAmount((prevItem) => (prevItem += 1));
@@ -47,6 +43,8 @@ export const MenuCard = ({ itemName, itemPrice }: item) => {
         <ToastAction altText='Click to close notification'>Close</ToastAction>
       ),
     });
+
+    setItemAmount(0);
   };
 
   return (
