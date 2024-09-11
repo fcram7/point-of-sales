@@ -47,10 +47,15 @@ export const AllMenusList = () => {
   const drinksMenuItem = menuItem.filter(
     (data) => data.item_category === 'drinks'
   );
+  drinksMenuItem.sort((a, b) => a.id - b.id);
+  
   const foodsMenuItem = menuItem.filter((data) => data.item_category === 'foods');
+  foodsMenuItem.sort((a, b) => a.id - b.id);
+
   const setMealsMenuItem = menuItem.filter(
     (data) => data.item_category === 'setMeals'
   );
+  setMealsMenuItem.sort((a, b) => a.id - b.id);
 
   return (
     <div className='all-menus-list'>

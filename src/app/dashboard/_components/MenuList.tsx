@@ -55,6 +55,8 @@ export const MenuList = () => {
     (data) => data.item_category === itemCategory
   );
 
+  categorizedMenuData.sort((a, b) => a.id - b.id);
+
   return (
     <div className='menu-section__content grid xl:grid-cols-5 gap-4 relative'>
       {categorizedMenuData.length > 0 ? (
