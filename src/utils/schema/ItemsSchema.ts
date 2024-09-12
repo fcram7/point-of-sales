@@ -13,4 +13,4 @@ export const itemsSchema = z.object({
   itemCategory: z.enum([
     'drinks', 'foods', 'setMeals'
   ])
-})
+}).required();
