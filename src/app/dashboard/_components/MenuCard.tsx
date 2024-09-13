@@ -6,7 +6,7 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 import { rupiah } from '@/utils/priceConverter/priceConverter';
 import { orderStore } from '@/utils/zustand/order';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface item {
   itemName: string;

@@ -11,7 +11,8 @@ import { itemsSchema } from '@/utils/schema/ItemsSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { InputComponent } from './Input';
+// import { InputComponent } from './Input';
+import { InputComponent } from '@/components/Input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ export const EditMenuCardForm = ({ handleSubmit, itemName, itemPrice }: editMenu
                 inputType='text'
                 disabled={false}
                 onChangeHandler={(e) => field.onChange(e.target.value)}
+                required
               />
             )}
           />
@@ -61,6 +63,7 @@ export const EditMenuCardForm = ({ handleSubmit, itemName, itemPrice }: editMenu
                 inputType='number'
                 disabled={false}
                 onChangeHandler={(e) => field.onChange(e.target.valueAsNumber)}
+                required
               />
             )}
           />

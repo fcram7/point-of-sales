@@ -5,7 +5,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { InputComponent } from './Input';
+import { InputComponent } from '@/components/Input';
 import { loginFormSchema } from '@/utils/schema/LoginSchema';
 import { signIn } from '@/api/auth';
 import { useRouter } from 'next/navigation';
@@ -59,6 +59,9 @@ export const Login = () => {
                   inputPlaceholder='insert your email'
                   inputType='email'
                   field={field}
+                  disabled={false}
+                  required
+                  onChangeHandler={(e) => field.onChange(e.target.value)}
                 />
               )}
             />
@@ -71,6 +74,9 @@ export const Login = () => {
                   inputPlaceholder='insert your password'
                   inputType='password'
                   field={field}
+                  disabled={false}
+                  required
+                  onChangeHandler={(e) => field.onChange(e.target.value)}
                 />
               )}
             />

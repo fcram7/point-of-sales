@@ -7,7 +7,8 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form';
-import { InputComponent } from './Input';
+// import { InputComponent } from './Input';
+import { InputComponent } from '@/components/Input';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { orderSchema } from '@/utils/schema/OrderSchema';
@@ -15,12 +16,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { orderStore } from '@/utils/zustand/order';
 import { Button } from '@/components/ui/button';
 import { OrderModalCard } from './OrderModalCard';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { RadioGroup } from '@/components/ui/radio-group';
 import { setOrderData } from '@/api/db';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import { DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DialogClose, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { RadioItem } from '@/components/RadioItem';
 
 interface orderModal {
   cancelButtonHandler: () => void;
@@ -55,15 +56,8 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
           <ToastAction altText='Click to close notification'>Close</ToastAction>
         ),
       });
-      setOrder({
-        orderAmount: 0,
-        orderName: '',
-        orderTotal: 0,
-        itemPrice: 0,
-      });
 
-      console.log(order);
-      // location.reload();
+      location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -92,7 +86,9 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                       inputPlaceholder=''
                       inputType='text'
                       field={field}
-                      disabled
+                      disabled={true}
+                      required
+                      onChangeHandler={(e) => field.onChange(e.target.value)}
                     />
                   )}
                 />
@@ -106,6 +102,8 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                       inputType='text'
                       field={field}
                       disabled={false}
+                      required
+                      onChangeHandler={(e) => field.onChange(e.target.value)}
                     />
                   )}
                 />
@@ -141,26 +139,9 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                             onValueChange={field.onChange}
                             {...field}
                           >
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='Cash' id='radioCash' />
-                              </FormControl>
-                              <Label className='mt-0' htmlFor='r1'>
-                                Cash
-                              </Label>
-                            </FormItem>
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='QRIS' id='radioQris' />
-                              </FormControl>
-                              <Label htmlFor='r2'>QRIS</Label>
-                            </FormItem>
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='Debit' id='radioDebit' />
-                              </FormControl>
-                              <Label htmlFor='r3'>Debit</Label>
-                            </FormItem>
+                            <RadioItem value='Cash' id='radioCash' label='Cash' htmlFor='r1' />
+                            <RadioItem value='QRIS' id='radioQris' label='QRIS' htmlFor='r2' />
+                            <RadioItem value='Debit' id='radioDebit' label='Debit' htmlFor='r3' />
                           </RadioGroup>
                         </FormControl>
                       </FormItem>
