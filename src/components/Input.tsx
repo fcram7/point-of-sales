@@ -2,7 +2,7 @@
 
 import { FormControl, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { allMenuInputProps, loginInputProps, orderInputProps } from '@/utils/interfaces/InputInterfaces';
+import { allMenuInputProps, loginInputProps, orderInputProps, reservationInputProps } from '@/utils/interfaces/InputInterfaces';
 
 export const InputComponent = ({
   field,
@@ -11,7 +11,7 @@ export const InputComponent = ({
   inputType,
   disabled,
   onChangeHandler
-}: loginInputProps | orderInputProps | allMenuInputProps) => {
+}: loginInputProps | orderInputProps | allMenuInputProps | reservationInputProps) => {
   return (
     <>
       <FormItem>

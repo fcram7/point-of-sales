@@ -23,19 +23,30 @@ interface items {
   itemCategory: string;
 }
 
+interface reservations {
+  reservationId: string;
+  contactPerson: string;
+  contactNumber: string;
+  selectedTable: number | null;
+  peopleAmount: number | null;
+  reservationSchedule: Date;
+  reservationStarts: string;
+  reservationEnds: string;
+  // reservationSchedule: string;
+  // reservationTime: reservationTime[];
+  attendedStatus: boolean;
+}
+
 export const getItemData = async () => {
   const { data, error } = await supabase
     .from('item')
     .select('id, item_name, item_price, item_category');
-    // .select('*');
 
   if (error) {
     console.error('Error fetching items data: ', error.message);
 
     return { data: [], error };
   }
-
-  console.log('Data: ', data);
 
   return { data, error };
 };
@@ -53,6 +64,30 @@ export const getOrdersData = async () => {
 
   return { data, error };
 };
+
+export const getTableData = async () => {
+  const { data, error } = await supabase.from('tables').select('*');
+
+  if (error) {
+    console.error('Error fetching tables data: ', error.message);
+    return { data: [], error };
+  }
+
+  console.log('Table data: ', data)
+
+  return { data, error };
+}
+
+export const getReservationsData = async () => {
+  const { data, error } = await supabase.from('reservations'). select('*');
+
+  if (error) {
+    console.error('Error fetching reservations data: ', error.message);
+    return { data: [], error };
+  }
+
+  return { data, error };
+}
 
 export const setItemData = async ({
   itemName,
@@ -103,6 +138,43 @@ export const setOrderData = async ({
 
   return { data, error: null };
 };
+
+export const setReservationData = async ({
+  reservationId,
+  contactPerson,
+  contactNumber,
+  selectedTable,
+  peopleAmount,
+  reservationSchedule,
+  // reservationTime,
+  reservationStarts,
+  reservationEnds,
+  attendedStatus
+}: reservations) => {
+  const { data, error } = await supabase.from('reservations').insert({
+    reservation_id: reservationId,
+    contact_person: contactPerson,
+    contact_number: contactNumber,
+    selected_table: selectedTable,
+    people_amount: peopleAmount,
+    reservation_schedule: reservationSchedule,
+    reservation_starts: reservationStarts,
+    reservation_ends: reservationEnds,
+    // reservation_time: [
+    //   {
+    //     ...reservationTime
+    //   }
+    // ],
+    attended_status: attendedStatus
+  });
+
+  if (error) {
+    console.error('Error inserting reservation data: ', error.message);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+}
 
 export const updateItemData = async ({
   id,

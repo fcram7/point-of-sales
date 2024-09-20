@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 export const orderSchema = z.object({
-  orderId: z.string().min(6),
+  orderId: z.string({
+    required_error: 'Order ID required'
+  }).min(6),
   customerName: z.string({
     required_error: 'Customer name required',
     invalid_type_error: 'Invalid type'
