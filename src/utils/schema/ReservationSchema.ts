@@ -37,11 +37,11 @@ export const reservationSchema = z.object({
   selectedTable: z.coerce.number({
     required_error: 'Reservation Selected table required',
     invalid_type_error: 'Invalid data type for reservation selected table data'
-  }).int().positive().nullable(),
+  }).lte(10).int().positive().nullable(),
   peopleAmount: z.coerce.number({
     required_error: 'Reservation People amount required',
     invalid_type_error: 'Invalid data type for reservation people amount data'
-  }).int().positive().nullable(),
+  }).lte(10).int().positive().nullable(),
   reservationSchedule: z.date({
     required_error: 'Reservation Booking schedule required',
     invalid_type_error: 'Invalid data type for reservation booking schedule data'
@@ -54,7 +54,6 @@ export const reservationSchema = z.object({
     required_error: 'Reservation time end required',
     invalid_type_error: 'Invalid data type for reservation time end data'
   }),
-  // reservationStarts: z.enum(time).array().min(1).safeParse([]).success
   // attendedStatus: z.boolean({
   //   required_error: 'Reservation attended status required',
   //   invalid_type_error: 'Invalid data type for reservation attended status'

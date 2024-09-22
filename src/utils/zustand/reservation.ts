@@ -8,7 +8,7 @@ interface reservationTime {
 interface reservation {
   contactPerson: string;
   contactNumber: string;
-  selectedTable: number;
+  selectedTable: number | null;
   peopleAmount: number;
   // reservationSchedule: Date | null;
   reservationSchedule: string;
@@ -29,7 +29,7 @@ interface reservationAction {
 export const reservationStore = create<reservation & reservationAction>((set) => ({
   contactPerson: '',
   contactNumber: '',
-  selectedTable: 1,
+  selectedTable: null,
   peopleAmount: 1,
   // reservationSchedule: null,
   reservationSchedule: '',

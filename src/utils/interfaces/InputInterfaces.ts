@@ -1,7 +1,6 @@
 import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
-
 //Login input props
 export interface loginInputProps {
   field: ControllerRenderProps<
@@ -65,11 +64,8 @@ export interface reservationInputProps {
       selectedTable: number | null;
       peopleAmount: number | null;
       reservationSchedule: any;
-      // reservationSchedule: string;
-      // reservationTime: reservationTime[];
       reservationStarts: string;
       reservationEnds: string;
-      // attendedStatus: boolean;
     },
     'reservationId' | 'contactPerson' | 'contactNumber' | 'selectedTable' | 'peopleAmount' | 'reservationSchedule' | 'reservationStarts' | 'reservationEnds'
   >

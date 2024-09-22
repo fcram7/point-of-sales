@@ -4,9 +4,7 @@ import { InputComponent } from '@/components/Input';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
-  DrawerClose,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
@@ -29,6 +27,9 @@ import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { TimeSelector } from './TimeSelector';
+import { TableSelector } from './TableSelector';
+import { PeopleAmountSelector } from './PeopleAmountSelector';
+import { reservationStore } from '@/utils/zustand/reservation';
 
 interface reservationInput {
   handleSubmit: (values: z.infer<typeof reservationSchema>) => void;
@@ -41,6 +42,7 @@ export const ReservationInput = ({ handleSubmit }: reservationInput) => {
       reservationId: `RSV${Date.now()}`,
       contactPerson: '',
       contactNumber: '',
+      // selectedTable: tableDefaultValue,
       selectedTable: null,
       peopleAmount: null,
       reservationSchedule: new Date(),
@@ -49,6 +51,9 @@ export const ReservationInput = ({ handleSubmit }: reservationInput) => {
       // attendedStatus: false
     },
   });
+  
+  const { setSelectedTable } = reservationStore();
+  // setSelectedTable(tableDefaultValue);
 
   return (
     <div className='reservation-input w-full'>
@@ -116,36 +121,40 @@ export const ReservationInput = ({ handleSubmit }: reservationInput) => {
               name='selectedTable'
               control={form.control}
               render={({ field }) => (
-                <InputComponent
-                  inputLabel='Selected Table'
-                  inputPlaceholder='Insert the table for reservation'
-                  inputType='number'
-                  field={field}
-                  disabled={false}
-                  required
-                  onChangeHandler={(e) => {
-                    if (e.target.value === '') return field.onChange(undefined);
-                    field.onChange(e.target.valueAsNumber);
-                  }}
-                />
+                // <InputComponent
+                //   inputLabel='Selected Table'
+                //   inputPlaceholder='Insert the table for reservation'
+                //   inputType='number'
+                //   field={field}
+                //   disabled={false}
+                //   required
+                //   max={10}
+                //   onChangeHandler={(e) => {
+                //     if (e.target.value === '') return field.onChange(undefined);
+                //     field.onChange(e.target.valueAsNumber);
+                //   }}
+                // />
+                <TableSelector field={field} inputLabel='Table to reserve' form={form} setValue='selectedTable' />
               )}
             />
             <FormField
               name='peopleAmount'
               control={form.control}
               render={({ field }) => (
-                <InputComponent
-                  inputLabel='Amount of People'
-                  inputPlaceholder='Insert the amount of people for the reservation'
-                  inputType='number'
-                  field={field}
-                  disabled={false}
-                  required
-                  onChangeHandler={(e) => {
-                    if (e.target.value === '') return field.onChange(undefined);
-                    field.onChange(e.target.valueAsNumber);
-                  }}
-                />
+                // <InputComponent
+                //   inputLabel='Amount of People'
+                //   inputPlaceholder='Insert the amount of people for the reservation'
+                //   inputType='number'
+                //   field={field}
+                //   disabled={false}
+                //   required
+                //   max={10}
+                //   onChangeHandler={(e) => {
+                //     if (e.target.value === '') return field.onChange(undefined);
+                //     field.onChange(e.target.valueAsNumber);
+                //   }}
+                // />
+                <PeopleAmountSelector field={field} inputLabel='Amount of people' form={form} setValue='peopleAmount' />
               )}
             />
             <FormField

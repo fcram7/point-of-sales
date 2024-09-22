@@ -6,9 +6,15 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { OrderModal } from './OrderModal';
 import { orderStore } from '@/utils/zustand/order';
-import { getItemData, getReservationsData, getTableData } from '@/api/db';
+import { getItemData, getReservationsData, getTableData, setReservationData } from '@/api/db';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { TableCard } from './TableCard';
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
+import { ReservationInput } from './ReservationInput';
+import { z } from 'zod';
+import { reservationSchema } from '@/utils/schema/ReservationSchema';
+import { useToast } from '@/components/ui/use-toast';
+import { reservationStore } from '@/utils/zustand/reservation';
 
 interface item {
   id: number;
@@ -101,8 +107,6 @@ export const MenuList = () => {
   //   fetchAllReservations();
   // }, [])
 
-
-
   const inputButtonHandler = () => {
     let totalAmount = order.reduce((acc, item) => acc + item.orderTotal, 0);
 
@@ -111,6 +115,40 @@ export const MenuList = () => {
 
   const cancelButtonHandler = () => {
     location.reload();
+  };
+
+  const { toast } = useToast();
+  const { attendedStatus } = reservationStore();
+
+  const reservationSubmitHandler = async (
+    values: z.infer<typeof reservationSchema>
+  ) => {
+    try {
+      await setReservationData({
+        reservationId: values.reservationId,
+        contactPerson: values.contactPerson,
+        contactNumber: values.contactNumber,
+        selectedTable: values.selectedTable,
+        peopleAmount: values.peopleAmount,
+        reservationSchedule: values.reservationSchedule,
+        reservationStarts: values.reservationStarts,
+        reservationEnds: values.reservationEnds,
+        attendedStatus: attendedStatus,
+      });
+
+      console.log('Submitted values: ', values);
+
+      toast({
+        title: 'Submitted date:',
+        description: (
+          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+            <code className='text-white'>{values.reservationSchedule.toDateString()}</code>
+          </pre>
+        )
+      })
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const categorizedMenuData = menuItem?.filter(
@@ -147,7 +185,7 @@ export const MenuList = () => {
             key={table.id}
             tableNumber={table.table_number}
             tableCapacity={table.table_capacity}
-            reservationData={table.reservationData}
+            // reservationData={table.reservationData}
           />
         ))
       ) : (
@@ -174,6 +212,25 @@ export const MenuList = () => {
           )}
         </DialogContent>
       </Dialog>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <Button type='button' className={`fixed menu-section__input-order-btn bottom-5 right-10 ${itemCategory === 'tables' ? '' : 'hidden'}`}>Make Reservation</Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className='all-menus-card__drawer-content px-large xl:px-small'>
+            <ReservationInput handleSubmit={reservationSubmitHandler} />
+          </div>
+          <DrawerFooter>
+            <div className='flex w-full items-center justify-center gap-4'>
+              <DrawerClose asChild>
+                <Button type='button' variant={'outline'} className='hover:border-primary'>
+                  Cancel Edit
+                </Button>
+              </DrawerClose>
+            </div>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

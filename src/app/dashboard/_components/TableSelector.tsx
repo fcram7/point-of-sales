@@ -17,9 +17,10 @@ import { reservationSchema } from '@/utils/schema/ReservationSchema';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-import { time } from './ReservationInputArrays';
+import { table, time } from './ReservationInputArrays';
+import { reservationStore } from '@/utils/zustand/reservation';
 
-interface timeSelector {
+interface tableSelector {
   form: UseFormReturn<
     {
       reservationId: string;
@@ -34,7 +35,7 @@ interface timeSelector {
     any,
     undefined
   >;
-  setValue: 'reservationStarts' | 'reservationEnds';
+  setValue: 'selectedTable';
   field: ControllerRenderProps<{
     reservationId: string;
     contactPerson: string;
@@ -44,15 +45,16 @@ interface timeSelector {
     reservationSchedule: Date;
     reservationStarts: string;
     reservationEnds: string;
-  }, 'reservationStarts' | 'reservationEnds'>;
+  }, 'selectedTable'>;
   inputLabel: string;
 }
 
-export const TimeSelector = (
-  { form, setValue, field, inputLabel }: timeSelector
+export const TableSelector = (
+  { form, setValue, field, inputLabel }: tableSelector
 ) => {
+  const { selectedTable, setSelectedTable } = reservationStore();
   return (
-    <FormItem>
+    <FormItem className='w-[60%]'>
       <Popover>
         <FormLabel>{inputLabel}</FormLabel>
         <PopoverTrigger asChild>
@@ -66,8 +68,8 @@ export const TimeSelector = (
               )}
             >
               {field.value
-                ? time.find((time) => time.value === field.value)?.label
-                : 'Select time'}
+                ? table.find((table) => table.value === field.value)?.label
+                : 'Select table'}
               <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-75' />
             </Button>
           </FormControl>
@@ -76,22 +78,23 @@ export const TimeSelector = (
           <Command>
             <CommandList>
               <CommandGroup>
-                {time.map((time) => (
+                {table.map((table) => (
                   <CommandItem
-                    value={time.label}
-                    key={time.value}
+                    value={table.label}
+                    key={table.value}
                     onSelect={() => {
-                      form.setValue(setValue, time.value)
-                      console.log('Selected value: ', time.value)
+                      form.setValue(setValue, table.value)
+                      setSelectedTable(table.value);
+                      console.log('Selected value: ', table.value, selectedTable)
                     }}
                   >
                     <Check 
                       className={cn(
                         'mr-2 h-4 w-4',
-                        time.value === field.value ? 'opacity-100' : 'opacity-0'
+                        table.value === field.value ? 'opacity-100' : 'opacity-0'
                       )}
                     />
-                    {time.label}
+                    {table.label}
                   </CommandItem>
                 ))}
               </CommandGroup>

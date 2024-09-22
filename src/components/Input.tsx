@@ -10,6 +10,7 @@ export const InputComponent = ({
   inputPlaceholder,
   inputType,
   disabled,
+  max,
   onChangeHandler
 }: loginInputProps | orderInputProps | allMenuInputProps | reservationInputProps) => {
   return (
@@ -17,7 +18,7 @@ export const InputComponent = ({
       <FormItem>
         <FormLabel>{inputLabel}</FormLabel>
         <FormControl>
-          <Input placeholder={inputPlaceholder} {...field} type={inputType} disabled={disabled} required onChange={onChangeHandler}/>
+          <Input placeholder={inputPlaceholder} max={inputType === 'number' ? max : 0} {...field} type={inputType} disabled={disabled} required onChange={onChangeHandler}/>
         </FormControl>
       </FormItem>
     </>

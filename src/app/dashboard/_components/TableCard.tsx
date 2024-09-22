@@ -31,11 +31,8 @@ interface reservations {
   selected_table: number;
   people_amount: number;
   reservation_schedule: Date;
-  // reservationSchedule: string;
   reservation_starts: string;
   reservation_ends: string;
-  // reservationSchedule: string;
-  // reservationTime: reservationTime[];
   attended_status: boolean;
 }
 
@@ -43,13 +40,11 @@ interface tables {
   id?: number;
   tableNumber: number;
   tableCapacity: number;
-  reservationData: reservations[];
 }
 
 export const TableCard = ({
   tableNumber,
   tableCapacity,
-  // reservationData,
 }: tables) => {
   const { attendedStatus } = reservationStore();
   const [reservationItem, setReservationItem] = useState<reservations[]>([]);
@@ -71,7 +66,6 @@ export const TableCard = ({
   }, []);
 
   const reservationData = reservationItem.filter((reservation) => reservation.selected_table === tableNumber);
-  console.log('Resevation data: ', reservationData)
 
   const reservationSubmitHandler = async (
     values: z.infer<typeof reservationSchema>
@@ -132,7 +126,6 @@ export const TableCard = ({
                         reservationSchedule={reservation.reservation_schedule}
                         reservationStarts={reservation.reservation_starts}
                         reservationEnds={reservation.reservation_ends}
-                        // reservationTime={reservation.reservationTime}
                         attendedStatus={reservation.attended_status}
                       />
                     ))}
@@ -141,13 +134,13 @@ export const TableCard = ({
             </Accordion>
 
             <div className="table-card__make-reservation-btn-container flex justify-end mt-6">
-              <Drawer>
+              {/* <Drawer>
                 <DrawerTrigger asChild>
                   <Button type='button'>Make Reservation</Button>
                 </DrawerTrigger>
                 <DrawerContent>
                   <div className='all-menus-card__drawer-content px-large xl:px-small'>
-                    <ReservationInput handleSubmit={reservationSubmitHandler}/>
+                    <ReservationInput handleSubmit={reservationSubmitHandler} />
                   </div>
                   <DrawerFooter>
                     <div className='flex w-full items-center justify-center gap-4'>
@@ -159,7 +152,7 @@ export const TableCard = ({
                     </div>
                   </DrawerFooter>
                 </DrawerContent>
-              </Drawer>
+              </Drawer> */}
             </div>
           </CardContent>
         </Card>
