@@ -1,10 +1,14 @@
-import { getItemData } from '@/api/db';
+'use client';
+
+import { CheckUserSession } from '@/components/CheckUserSession';
 import { MenuList } from './_components/MenuList';
 
-export const MenuSection = async () => {
+export const MenuSection = () => {
   return (
-    <section className='menu-section py-20'>
-      <MenuList />
-    </section>
+    <CheckUserSession routeTo='/dashboard'>
+      <section className='menu-section py-20'>
+        <MenuList />
+      </section>
+    </CheckUserSession>
   );
 };

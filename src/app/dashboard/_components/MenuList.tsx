@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { OrderModal } from './OrderModal';
 import { orderStore } from '@/utils/zustand/order';
-import { getItemData, getReservationsData, getTableData, setReservationData } from '@/api/db';
+import { getItemData, getTableData, setReservationData } from '@/api/db';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { TableCard } from './TableCard';
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
@@ -44,26 +44,14 @@ interface reservations {
   reservationSchedule: Date;
   reservationStarts: string;
   reservationEnds: string;
-  // reservationSchedule: string;
-  // reservationTime: reservationTime[];
   attendedStatus: boolean;
 }
-
-// interface reservations {
-//   reservationId: string;
-//   contactPerson: string;
-//   contactNumber: string;
-//   selectedTable: number;
-//   peopleAmount: number;
-//   bookingSchedule: Date;
-// }
 
 export const MenuList = () => {
   const { itemCategory } = categoryStore();
   const { order, setTotal } = orderStore();
   const [menuItem, setMenuItem] = useState<item[]>([]);
   const [tableItem, setTableItem] = useState<tables[]>([]);
-  // const [reservationItem, setReservationItem] = useState<reservations[]>([]);
 
   useEffect(() => {
     const fetchAllMenus = async () => {
@@ -92,20 +80,6 @@ export const MenuList = () => {
 
     fetchAllTables();
   }, []);
-
-  // useEffect(() => {
-  //   const fetchAllReservations = async () => {
-  //     const { data, error } = await getReservationsData();
-
-  //     if (error) {
-  //       console.error('Error fetching reservations data: ', error.message);
-  //     }
-
-  //     setReservationItem(data as reservations[]);
-  //   }
-
-  //   fetchAllReservations();
-  // }, [])
 
   const inputButtonHandler = () => {
     let totalAmount = order.reduce((acc, item) => acc + item.orderTotal, 0);
@@ -155,8 +129,6 @@ export const MenuList = () => {
     (data) => data.item_category === itemCategory
   );
 
-  // const filteredReservationData = reservationItem.filter((data) => data.selectedTable === )
-
   categorizedMenuData.sort((a, b) => a.id - b.id);
 
   return (
@@ -185,7 +157,6 @@ export const MenuList = () => {
             key={table.id}
             tableNumber={table.table_number}
             tableCapacity={table.table_capacity}
-            // reservationData={table.reservationData}
           />
         ))
       ) : (
