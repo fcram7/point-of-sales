@@ -50,11 +50,10 @@ export const MenuCard = ({ itemName, itemPrice }: item) => {
   return (
     <article className='menu-card rounded-lg border-2 border-slate-300 w-full shadow-xl'>
       <div className='menu-card__content p-6'>
-        <div className='menu-card__menu-img flex items-center justify-center h-44'>
-          IMG PLACEHOLDER
+        <div className="menu-card__menu-information-container flex items-center justify-between h-16">
+          <h1 className='menu-card__menu-name w-[50%] xl:text-xl'>{itemName}</h1>
+          <p className='menu-card__menu-price xl:text-lg'>{rupiah(itemPrice)}</p>
         </div>
-        <h1 className='menu-card__menu-name'>{itemName}</h1>
-        <p className='menu-card__menu-price'>{rupiah(itemPrice)}</p>
         <div className='menu-card__order-inputs flex gap-2 mt-4 items-center justify-center'>
           <Button onClick={removeItemHandler}>-</Button>
           <Input

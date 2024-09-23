@@ -137,9 +137,9 @@ export const MenuList = () => {
         itemCategory === 'drinks' ||
         itemCategory === 'foods' ||
         itemCategory === 'setMeals'
-          ? 'xl:grid-cols-5'
+          ? 'xl:grid-cols-4'
           : 'xl:grid-cols-1'
-      } gap-4 relative`}
+      } gap-8 relative`}
     >
       {itemCategory === 'drinks' ||
       itemCategory === 'foods' ||
