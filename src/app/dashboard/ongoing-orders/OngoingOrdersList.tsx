@@ -5,13 +5,6 @@ import { OngoingOrdersCard } from './_components/OngoingOrdersCard';
 import { useEffect, useState } from 'react';
 import { getOrdersData } from '@/api/db';
 
-interface orderItem {
-  orderName: string;
-  itemPrice: number;
-  orderAmount: number;
-  orderTotal: number;
-}
-
 interface ongoingOrdersItem {
   order_id: string;
   customer_name: string;
@@ -24,17 +17,20 @@ interface ongoingOrdersItem {
 export const OngoingOrdersList = () => {
   const [ongoingOrdersData, setOngoingOrdersData] = useState<ongoingOrdersItem[]>([]);
 
-  useEffect(() => {
-    const fetchOngoingOrders = async () => {
-      const { data, error } = await getOrdersData();
-      if(error) {
-        console.error(error.message);
-      }
-      setOngoingOrdersData(data as ongoingOrdersItem[]);
+  const fetchOngoingOrders = async () => {
+    console.log('fetching ongoing orders data...');
+    const { data, error } = await getOrdersData();
+
+    if(error) {
+      console.error(error.message);
     }
 
+    setOngoingOrdersData(data as ongoingOrdersItem[]);
+  }
+
+  useEffect(() => {
     fetchOngoingOrders();
-  }, [ongoingOrdersData]);
+  }, []);
 
   return (
     <div className='ongoing-orders-list'>
@@ -51,6 +47,7 @@ export const OngoingOrdersList = () => {
               total={order.total}
               queueOrder={order.queue_order}
               key={index}
+              fetchOngoingOrders={() => fetchOngoingOrders()}
             />
           ))) : (
             <p className='xl:text-2xl'>No order queued</p>

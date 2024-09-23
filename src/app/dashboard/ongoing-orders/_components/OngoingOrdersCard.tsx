@@ -19,9 +19,10 @@ interface ongoingOrdersItem {
   total: number;
   payment: string;
   queueOrder?: boolean;
+  fetchOngoingOrders: () => void;
 }
 
-export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment, queueOrder }: ongoingOrdersItem) => {
+export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment, queueOrder, fetchOngoingOrders }: ongoingOrdersItem) => {
   const orderObject: orderItem[] = JSON.parse(order);
 
   const orderData: orderItem[] = Object.values(orderObject);
@@ -34,6 +35,9 @@ export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment
         orderId: orderId,
         queueOrder: false
       });
+
+      fetchOngoingOrders();
+
       toast({
         title: `${orderId} is finished`,
         action: (

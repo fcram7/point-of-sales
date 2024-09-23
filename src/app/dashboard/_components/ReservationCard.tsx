@@ -17,6 +17,8 @@ interface reservations {
   reservationStarts: string;
   reservationEnds: string;
   attendedStatus: boolean;
+  // fetchAllReservations: Promise<void>;
+  fetchAllReservations: () => void;
 }
 
 export const ReservationCard = ({
@@ -27,6 +29,7 @@ export const ReservationCard = ({
   peopleAmount,
   reservationStarts,
   reservationEnds,
+  fetchAllReservations
 }: reservations) => {
   const reservationScheduleObject = new Date(reservationSchedule);
 
@@ -42,6 +45,8 @@ export const ReservationCard = ({
         attendedStatus: true,
       });
 
+      fetchAllReservations();
+
       toast({
         title: 'Reservation has been attended',
         action: (
@@ -52,6 +57,7 @@ export const ReservationCard = ({
     } catch (error) {
       console.error(error);
     }
+
   }
   return (
     <article className='reservation-card'>

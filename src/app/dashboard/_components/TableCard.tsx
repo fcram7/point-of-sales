@@ -41,20 +41,19 @@ export const TableCard = ({
   tableCapacity,
 }: tables) => {
   const [reservationItem, setReservationItem] = useState<reservations[]>([]);
-  const { toast } = useToast();
-
-  useEffect(() => {
+  
+  const fetchAllReservations = async () => {
     console.log('Fetching reservation data...');
-    const fetchAllReservations = async () => {
-      const { data, error } = await getReservationsData();
+    const { data, error } = await getReservationsData();
 
-      if (error) {
-        console.error('Error fetching reservations data: ', error.message);
-      }
-
-      setReservationItem(data as reservations[]);
+    if (error) {
+      console.error('Error fetching reservations data: ', error.message);
     }
 
+    setReservationItem(data as reservations[]);
+  }
+
+  useEffect(() => {
     fetchAllReservations();
   }, []);
 
@@ -90,6 +89,7 @@ export const TableCard = ({
                         reservationStarts={reservation.reservation_starts}
                         reservationEnds={reservation.reservation_ends}
                         attendedStatus={reservation.attended_status}
+                        fetchAllReservations={() => fetchAllReservations()}
                       />
                     ))}
                 </AccordionContent>
