@@ -25,16 +25,14 @@ interface items {
 
 interface reservations {
   reservationId: string;
-  contactPerson: string;
-  contactNumber: string;
-  selectedTable: number | null;
-  peopleAmount: number | null;
-  reservationSchedule: Date;
-  reservationStarts: string;
-  reservationEnds: string;
-  // reservationSchedule: string;
-  // reservationTime: reservationTime[];
-  attendedStatus: boolean;
+  contactPerson?: string;
+  contactNumber?: string;
+  selectedTable?: number | null;
+  peopleAmount?: number | null;
+  reservationSchedule?: Date;
+  reservationStarts?: string;
+  reservationEnds?: string;
+  attendedStatus?: boolean;
 }
 
 export const getItemData = async () => {
@@ -73,13 +71,13 @@ export const getTableData = async () => {
     return { data: [], error };
   }
 
-  console.log('Table data: ', data)
+  console.log('Table data: ', data);
 
   return { data, error };
-}
+};
 
 export const getReservationsData = async () => {
-  const { data, error } = await supabase.from('reservations'). select('*');
+  const { data, error } = await supabase.from('reservations').select('*');
 
   if (error) {
     console.error('Error fetching reservations data: ', error.message);
@@ -87,7 +85,7 @@ export const getReservationsData = async () => {
   }
 
   return { data, error };
-}
+};
 
 export const setItemData = async ({
   itemName,
@@ -146,10 +144,9 @@ export const setReservationData = async ({
   selectedTable,
   peopleAmount,
   reservationSchedule,
-  // reservationTime,
   reservationStarts,
   reservationEnds,
-  attendedStatus
+  attendedStatus,
 }: reservations) => {
   const { data, error } = await supabase.from('reservations').insert({
     reservation_id: reservationId,
@@ -160,12 +157,7 @@ export const setReservationData = async ({
     reservation_schedule: reservationSchedule,
     reservation_starts: reservationStarts,
     reservation_ends: reservationEnds,
-    // reservation_time: [
-    //   {
-    //     ...reservationTime
-    //   }
-    // ],
-    attended_status: attendedStatus
+    attended_status: attendedStatus,
   });
 
   if (error) {
@@ -174,7 +166,7 @@ export const setReservationData = async ({
   }
 
   return { data, error: null };
-}
+};
 
 export const updateItemData = async ({
   id,
@@ -214,6 +206,27 @@ export const updateQueueOrder = async ({ orderId, queueOrder }: orders) => {
 
   if (error) {
     console.error('Error:', error);
+
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+};
+
+export const setReservationAttendedStatus = async ({
+  reservationId,
+  attendedStatus,
+}: reservations) => {
+  const { data, error } = await supabase
+    .from('reservations')
+    .update({
+      attended_status: attendedStatus,
+    })
+    .eq('reservation_id', reservationId)
+    .select();
+
+  if (error) {
+    console.error('Error: ', error);
 
     return { data: null, error };
   }

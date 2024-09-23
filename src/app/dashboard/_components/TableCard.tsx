@@ -14,13 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ReservationCard } from './ReservationCard';
-import { Button } from '@/components/ui/button';
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
-import { ReservationInput } from './ReservationInput';
-import { z } from 'zod';
-import { reservationSchema } from '@/utils/schema/ReservationSchema';
-import { getReservationsData, setReservationData } from '@/api/db';
-import { reservationStore } from '@/utils/zustand/reservation';
+import { getReservationsData } from '@/api/db';
 import { useToast } from '@/components/ui/use-toast';
 import { useEffect, useState } from 'react';
 
@@ -46,7 +40,6 @@ export const TableCard = ({
   tableNumber,
   tableCapacity,
 }: tables) => {
-  const { attendedStatus } = reservationStore();
   const [reservationItem, setReservationItem] = useState<reservations[]>([]);
   const { toast } = useToast();
 
@@ -65,38 +58,7 @@ export const TableCard = ({
     fetchAllReservations();
   }, []);
 
-  const reservationData = reservationItem.filter((reservation) => reservation.selected_table === tableNumber);
-
-  const reservationSubmitHandler = async (
-    values: z.infer<typeof reservationSchema>
-  ) => {
-    try {
-      await setReservationData({
-        reservationId: values.reservationId,
-        contactPerson: values.contactPerson,
-        contactNumber: values.contactNumber,
-        selectedTable: values.selectedTable,
-        peopleAmount: values.peopleAmount,
-        reservationSchedule: values.reservationSchedule,
-        reservationStarts: values.reservationStarts,
-        reservationEnds: values.reservationEnds,
-        attendedStatus: attendedStatus,
-      });
-
-      console.log('Submitted values: ', values);
-
-      toast({
-        title: 'Submitted date:',
-        description: (
-          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-            <code className='text-white'>{values.reservationSchedule.toDateString()}</code>
-          </pre>
-        )
-      })
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const reservationData = reservationItem.filter((reservation) => reservation.selected_table === tableNumber && reservation.attended_status === false);
 
   return (
     <article className='table-card w-full'>
@@ -119,6 +81,7 @@ export const TableCard = ({
                     reservationData.map((reservation, index) => (
                       <ReservationCard
                         key={index}
+                        reservationId={reservation.reservation_id}
                         contactPerson={reservation.contact_person}
                         contactNumber={reservation.contact_number}
                         selectedTable={reservation.selected_table}
@@ -132,28 +95,6 @@ export const TableCard = ({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-
-            <div className="table-card__make-reservation-btn-container flex justify-end mt-6">
-              {/* <Drawer>
-                <DrawerTrigger asChild>
-                  <Button type='button'>Make Reservation</Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <div className='all-menus-card__drawer-content px-large xl:px-small'>
-                    <ReservationInput handleSubmit={reservationSubmitHandler} />
-                  </div>
-                  <DrawerFooter>
-                    <div className='flex w-full items-center justify-center gap-4'>
-                      <DrawerClose asChild>
-                        <Button type='button' variant={'outline'} className='hover:border-primary'>
-                          Cancel Edit
-                        </Button>
-                      </DrawerClose>
-                    </div>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer> */}
-            </div>
           </CardContent>
         </Card>
       </div>
