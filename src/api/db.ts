@@ -71,8 +71,6 @@ export const getTableData = async () => {
     return { data: [], error };
   }
 
-  console.log('Table data: ', data);
-
   return { data, error };
 };
 
