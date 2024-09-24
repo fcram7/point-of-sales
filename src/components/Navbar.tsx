@@ -16,9 +16,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from './ui/navigation-menu';
+import { loggedInStatusStore } from '@/utils/zustand/loggedInStatus';
 
 export const Navbar = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const { setIsLoggedInStatus } = loggedInStatusStore();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -53,6 +55,7 @@ export const Navbar = () => {
 
     try {
       await signOut();
+      setIsLoggedInStatus(false);
       toast({
         title: 'Successfully Logged Out',
         action: (
