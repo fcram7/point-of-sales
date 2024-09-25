@@ -43,7 +43,7 @@ export const DashboardMenu = () => {
           <MenubarMenu>
             <MenubarTrigger>Tables</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem>Reservation</MenubarItem>
+              <MenubarItem onClick={() => setItemCategory('tables')}>Reservation</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
         </Menubar>

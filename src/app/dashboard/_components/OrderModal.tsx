@@ -7,7 +7,8 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form';
-import { InputComponent } from './Input';
+// import { InputComponent } from './Input';
+import { InputComponent } from '@/components/Input';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { orderSchema } from '@/utils/schema/OrderSchema';
@@ -15,11 +16,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { orderStore } from '@/utils/zustand/order';
 import { Button } from '@/components/ui/button';
 import { OrderModalCard } from './OrderModalCard';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { RadioGroup } from '@/components/ui/radio-group';
 import { setOrderData } from '@/api/db';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import { DialogClose, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { RadioItem } from '@/components/RadioItem';
 
 interface orderModal {
   cancelButtonHandler: () => void;
@@ -54,34 +56,27 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
           <ToastAction altText='Click to close notification'>Close</ToastAction>
         ),
       });
-      setOrder({
-        orderAmount: 0,
-        orderName: '',
-        orderTotal: 0,
-        itemPrice: 0,
-      });
 
-      console.log(order);
-      // location.reload();
+      location.reload();
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <article className='order-modal fixed top-[10%] border rounded-xl px-4 py-6 bg-secondary w-[80%]'>
+    <article className='order-modal w-full'>
       <div className='order-modal__content'>
-        <h1 className='order-modal__modal-title font-semibold xl:text-3xl mb-10'>
-          Input Order
-        </h1>
+        <DialogHeader>
+          <DialogTitle className='xl:text-xl'>Input Order</DialogTitle>
+        </DialogHeader>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(queueOrderHandler)}
-            className='space-y-6 w-full'
+            className='space-y-6 w-full mt-4'
           >
-            <div className='order-modal__order-information-container flex items-start justify-start gap-8'>
-              <div className='order-modal__order-detail w-[50%]'>
+            <div className='order-modal__order-information-container'>
+              <div className='order-modal__order-detail grid gap-4'>
                 <FormField
                   name='orderId'
                   control={form.control}
@@ -91,7 +86,9 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                       inputPlaceholder=''
                       inputType='text'
                       field={field}
-                      disabled
+                      disabled={true}
+                      required
+                      onChangeHandler={(e) => field.onChange(e.target.value)}
                     />
                   )}
                 />
@@ -105,6 +102,8 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                       inputType='text'
                       field={field}
                       disabled={false}
+                      required
+                      onChangeHandler={(e) => field.onChange(e.target.value)}
                     />
                   )}
                 />
@@ -127,7 +126,7 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
               </div>
 
               <div className='order-modal__order-payment'>
-                <div className='order-modal__payment-button-container mt-6'>
+                <div className='order-modal__payment-button-container mt-2'>
                   <FormField
                     control={form.control}
                     name='paymentType'
@@ -136,31 +135,13 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                         <FormLabel>Payment</FormLabel>
                         <FormControl>
                           <RadioGroup
-                            className='flex gap-6'
                             defaultValue='Cash'
                             onValueChange={field.onChange}
                             {...field}
                           >
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='Cash' id='radioCash' />
-                              </FormControl>
-                              <Label className='mt-0' htmlFor='r1'>
-                                Cash
-                              </Label>
-                            </FormItem>
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='QRIS' id='radioQris' />
-                              </FormControl>
-                              <Label htmlFor='r2'>QRIS</Label>
-                            </FormItem>
-                            <FormItem className='flex items-center space-x-2 space-y-0'>
-                              <FormControl>
-                                <RadioGroupItem value='Debit' id='radioDebit' />
-                              </FormControl>
-                              <Label htmlFor='r3'>Debit</Label>
-                            </FormItem>
+                            <RadioItem value='Cash' id='radioCash' label='Cash' htmlFor='r1' />
+                            <RadioItem value='QRIS' id='radioQris' label='QRIS' htmlFor='r2' />
+                            <RadioItem value='Debit' id='radioDebit' label='Debit' htmlFor='r3' />
                           </RadioGroup>
                         </FormControl>
                       </FormItem>
@@ -169,17 +150,19 @@ export const OrderModal = ({ cancelButtonHandler }: orderModal) => {
                 </div>
               </div>
             </div>
-
-            <div className='order-modal__modal-btn-container flex gap-2 justify-end'>
+            
+            <DialogFooter>
               <Button type='submit'>Queue Order</Button>
-              <Button
-                onClick={cancelButtonHandler}
-                variant='outline'
-                className='hover:border-primary'
-              >
-                Cancel
-              </Button>
-            </div>
+              <DialogClose asChild>
+                <Button
+                  onClick={cancelButtonHandler}
+                  variant='outline'
+                  className='hover:border-primary'
+                >
+                  Cancel
+                </Button>
+              </DialogClose>
+            </DialogFooter>
           </form>
         </Form>
       </div>

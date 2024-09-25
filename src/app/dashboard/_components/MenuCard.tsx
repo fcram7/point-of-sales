@@ -6,7 +6,7 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 import { rupiah } from '@/utils/priceConverter/priceConverter';
 import { orderStore } from '@/utils/zustand/order';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface item {
   itemName: string;
@@ -15,12 +15,8 @@ interface item {
 
 export const MenuCard = ({ itemName, itemPrice }: item) => {
   const [itemAmount, setItemAmount] = useState(0);
-  const { order, setOrder, setTotal } = orderStore();
+  const { setOrder } = orderStore();
   const { toast } = useToast();
-
-  // useEffect(() => {
-  //   console.log('current orders:', order);
-  // }, [order]);
 
   const addItemHandler = () => {
     setItemAmount((prevItem) => (prevItem += 1));
@@ -47,16 +43,17 @@ export const MenuCard = ({ itemName, itemPrice }: item) => {
         <ToastAction altText='Click to close notification'>Close</ToastAction>
       ),
     });
+
+    setItemAmount(0);
   };
 
   return (
     <article className='menu-card rounded-lg border-2 border-slate-300 w-full shadow-xl'>
       <div className='menu-card__content p-6'>
-        <div className='menu-card__menu-img flex items-center justify-center h-44'>
-          IMG PLACEHOLDER
+        <div className="menu-card__menu-information-container flex items-center justify-between h-16">
+          <h1 className='menu-card__menu-name w-[50%] xl:text-xl'>{itemName}</h1>
+          <p className='menu-card__menu-price xl:text-lg'>{rupiah(itemPrice)}</p>
         </div>
-        <h1 className='menu-card__menu-name'>{itemName}</h1>
-        <p className='menu-card__menu-price'>{rupiah(itemPrice)}</p>
         <div className='menu-card__order-inputs flex gap-2 mt-4 items-center justify-center'>
           <Button onClick={removeItemHandler}>-</Button>
           <Input

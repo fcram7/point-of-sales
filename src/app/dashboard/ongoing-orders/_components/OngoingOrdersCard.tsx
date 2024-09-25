@@ -4,7 +4,6 @@ import { updateQueueOrder } from '@/api/db';
 import { Button } from '@/components/ui/button';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
-import { orderStore } from '@/utils/zustand/order';
 
 interface orderItem {
   orderName: string;
@@ -20,21 +19,25 @@ interface ongoingOrdersItem {
   total: number;
   payment: string;
   queueOrder?: boolean;
+  fetchOngoingOrders: () => void;
 }
 
-export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment, queueOrder }: ongoingOrdersItem) => {
+export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment, queueOrder, fetchOngoingOrders }: ongoingOrdersItem) => {
   const orderObject: orderItem[] = JSON.parse(order);
 
   const orderData: orderItem[] = Object.values(orderObject);
 
   const { toast } = useToast();
 
-  const { inQueue, setInQueue } = orderStore();
-
-  const finishOrderButtonHandler = async () => {
+  const finishOrderButtonHandler = async (orderId: string) => {
     try {
-      setInQueue(false);
-      await updateQueueOrder(orderId, inQueue);
+      await updateQueueOrder({
+        orderId: orderId,
+        queueOrder: false
+      });
+
+      fetchOngoingOrders();
+
       toast({
         title: `${orderId} is finished`,
         action: (
@@ -42,7 +45,7 @@ export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment
         ),
       })
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
@@ -75,7 +78,7 @@ export const OngoingOrdersCard = ({ orderId, customerName, order, total, payment
       <p className='text-right xl:text-xl'>Total: {total}</p>
       { queueOrder ? (
         <div className="ongoing-order-card__finish-order-btn-container flex justify-end mt-4">
-          <Button type='button' onClick={finishOrderButtonHandler}>Finish Order</Button>
+          <Button type='button' onClick={() => finishOrderButtonHandler(orderId)}>Finish Order</Button>
         </div>
       ): (
         null

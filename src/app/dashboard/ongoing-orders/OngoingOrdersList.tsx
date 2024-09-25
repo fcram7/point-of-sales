@@ -2,15 +2,8 @@
 
 import Link from 'next/link';
 import { OngoingOrdersCard } from './_components/OngoingOrdersCard';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getOrdersData } from '@/api/db';
-
-interface orderItem {
-  orderName: string;
-  itemPrice: number;
-  orderAmount: number;
-  orderTotal: number;
-}
 
 interface ongoingOrdersItem {
   order_id: string;
@@ -21,31 +14,31 @@ interface ongoingOrdersItem {
   queue_order: boolean;
 }
 
-interface ongoingOrders {
-  ongoingOrders: Array<ongoingOrdersItem>;
-}
-
 export const OngoingOrdersList = () => {
   const [ongoingOrdersData, setOngoingOrdersData] = useState<ongoingOrdersItem[]>([]);
 
-  useEffect(() => {
-    const fetchOngoingOrders = async () => {
-      const { data, error } = await getOrdersData();
-      if(error) {
-        console.error(error.message);
-      }
-      setOngoingOrdersData(data as ongoingOrdersItem[]);
+  const fetchOngoingOrders = async () => {
+    console.log('fetching ongoing orders data...');
+    const { data, error } = await getOrdersData();
+
+    if(error) {
+      console.error(error.message);
     }
 
+    setOngoingOrdersData(data as ongoingOrdersItem[]);
+  }
+
+  useEffect(() => {
     fetchOngoingOrders();
-  }, [])
+  }, []);
+
   return (
     <div className='ongoing-orders-list'>
       <div className='ongoing-orders-list__content'>
         <h1 className='xl:text-3xl font-semibold mb-6'>Ongoing Orders</h1>
         <Link className='xl:text-xl' href={`/dashboard`}>Back to menu</Link>
         <div className="ongoing-orders-list__order-card-container mt-6 grid gap-4">
-          {ongoingOrdersData && ongoingOrdersData.map((order, index) => (
+          {ongoingOrdersData.length > 0 ? (ongoingOrdersData.map((order, index) => (
             <OngoingOrdersCard
               orderId={order.order_id}
               customerName={order.customer_name}
@@ -54,8 +47,11 @@ export const OngoingOrdersList = () => {
               total={order.total}
               queueOrder={order.queue_order}
               key={index}
+              fetchOngoingOrders={() => fetchOngoingOrders()}
             />
-          ))}
+          ))) : (
+            <p className='xl:text-2xl'>No order queued</p>
+          )}
         </div>
       </div>
     </div>

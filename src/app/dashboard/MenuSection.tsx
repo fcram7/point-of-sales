@@ -1,22 +1,14 @@
-import { getItemData } from '@/api/db';
+'use client';
+
+import { CheckUserSession } from '@/components/CheckUserSession';
 import { MenuList } from './_components/MenuList';
 
-export const MenuSection = async () => {
-  const { data: menuData = [], error } = await getItemData();
-
-  if (error) {
-    console.error('Error fetching data: ', error);
-    return <p>Error loading menu items</p>;
-  }
-
-  if (!Array.isArray(menuData)) {
-    console.error('Unexpected data format', menuData);
-    return <p>Unexpected data format</p>;
-  }
-
+export const MenuSection = () => {
   return (
-    <section className='menu-section py-20'>
-      <MenuList menuItem={menuData} />
-    </section>
+    <CheckUserSession routeTo='/dashboard'>
+      <section className='menu-section py-20'>
+        <MenuList />
+      </section>
+    </CheckUserSession>
   );
 };
