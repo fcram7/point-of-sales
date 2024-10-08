@@ -1,5 +1,4 @@
-import { Text } from '@react-pdf/renderer';
-import { OrderItemCard } from './OrderItemCard';
+import { StyleSheet, Text, View } from '@react-pdf/renderer';
 
 interface orderItem {
   orderName: string;
@@ -18,6 +17,25 @@ interface allOrdersItem {
   createdAt: string;
 }
 
+const styles = StyleSheet.create({
+  orderItemContainer: {
+    maxWidth: 150,
+    flex: 1,
+    flexDirection: 'column',
+    gap: '20px',
+    justifyContent: 'flex-start',
+    paddingTop: 6,
+    paddingLeft: 50
+  },
+  orderItem: {
+    fontSize: '8px',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: '12px',
+  },
+});
+
 export const OrderRecapCard = ({
   orderId,
   customerName,
@@ -29,21 +47,26 @@ export const OrderRecapCard = ({
 
   const orderData: orderItem[] = Object.values(orderObject);
   return (
-    <>
+    <View style={{
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start'
+    }}>
       <Text style={{ fontSize: '10px' }}>{orderId}</Text>
-      <Text style={{ fontSize: '10px', paddingLeft: 25 }}>{customerName}</Text>
+      <Text style={{ fontSize: '10px', marginLeft: 10 }}>{customerName}</Text>
       <Text style={{ fontSize: '10px' }}></Text>
-      {orderData.map((data, index) => (
-        <OrderItemCard
-          key={index}
-          orderName={data.orderName}
-          orderAmount={data.orderAmount}
-          orderTotal={data.orderTotal}
-          itemPrice={data.itemPrice}
-        />
-      ))}
-      <Text style={{ marginTop: 10 }}>Payment method: {payment}</Text>
+      <View style={styles.orderItemContainer}>
+        {orderData.map((data, index) => (
+          <View style={styles.orderItem} key={index}>
+            <Text style={{
+              maxWidth: 80
+            }}>{data.orderName}</Text>
+            <Text>x{data.orderAmount}</Text>
+          </View>
+        ))}
+      </View>
       <Text style={{ textAlign: 'right', fontSize: '10px' }}>{total}</Text>
-    </>
+    </View>
   );
 };
