@@ -13,6 +13,7 @@ interface ongoingOrdersItem {
   total: number;
   payment: string;
   queue_order: boolean;
+  created_at: string;
 }
 
 export const OngoingOrdersList = () => {
@@ -33,13 +34,17 @@ export const OngoingOrdersList = () => {
     fetchOngoingOrders();
   }, []);
 
+  const currentDate = new Date().toISOString().substring(0, 10);
+
+  const filteredOngoingOrders = ongoingOrdersData.filter(data => data.created_at.substring(0, 10) === currentDate);
+
   return (
     <div className='ongoing-orders-list'>
       <div className='ongoing-orders-list__content'>
         <h1 className='xl:text-3xl font-semibold mb-6'>Ongoing Orders</h1>
         <BackToMenu />
         <div className="ongoing-orders-list__order-card-container mt-6 grid gap-4">
-          {ongoingOrdersData.length > 0 ? (ongoingOrdersData.map((order, index) => (
+          {filteredOngoingOrders.length > 0 ? (filteredOngoingOrders.map((order, index) => (
             <OngoingOrdersCard
               orderId={order.order_id}
               customerName={order.customer_name}
