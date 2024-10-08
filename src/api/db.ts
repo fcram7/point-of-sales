@@ -63,6 +63,17 @@ export const getOrdersData = async () => {
   return { data, error };
 };
 
+export const getAllOrdersData = async () => {
+  const { data, error } = await supabase.from('orders').select('*');
+
+  if (error) {
+    console.error('Error fetching orders data: ', error.message);
+    return { data: [], error };
+  }
+
+  return { data, error }
+}
+
 export const getTableData = async () => {
   const { data, error } = await supabase.from('tables').select('*');
 
