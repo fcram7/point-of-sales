@@ -4,8 +4,8 @@ import { Instrument_Sans } from 'next/font/google';
 const instrumentSans = Instrument_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'All Orders',
-  description: 'All orders recap',
+  title: 'Dashboard | All Orders',
+  description: 'All orders recap data',
 };
 
 export default function RootLayout({
