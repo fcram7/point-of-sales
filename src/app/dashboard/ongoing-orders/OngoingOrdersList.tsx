@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { OngoingOrdersCard } from './_components/OngoingOrdersCard';
 import { useEffect, useState } from 'react';
 import { getOrdersData } from '@/api/db';
+import { BackToMenu } from '@/components/BackToMenu';
 
 interface ongoingOrdersItem {
   order_id: string;
@@ -36,7 +37,7 @@ export const OngoingOrdersList = () => {
     <div className='ongoing-orders-list'>
       <div className='ongoing-orders-list__content'>
         <h1 className='xl:text-3xl font-semibold mb-6'>Ongoing Orders</h1>
-        <Link className='xl:text-xl' href={`/dashboard`}>Back to menu</Link>
+        <BackToMenu />
         <div className="ongoing-orders-list__order-card-container mt-6 grid gap-4">
           {ongoingOrdersData.length > 0 ? (ongoingOrdersData.map((order, index) => (
             <OngoingOrdersCard
