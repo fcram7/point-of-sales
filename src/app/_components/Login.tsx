@@ -42,7 +42,12 @@ export const Login =  () => {
       router.push('/dashboard');
     } catch (err) {
       console.log(err);
-      alert(err);
+      return toast({
+        title: `Oops! There's an error ${err}`,
+        action: (
+          <ToastAction altText='Click to close notification'>Close</ToastAction>
+        ),
+      });
     }
   };
 
