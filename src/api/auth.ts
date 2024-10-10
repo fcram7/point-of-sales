@@ -7,6 +7,7 @@ interface auth {
   fullName?: string;
 }
 
+// User login
 export const signIn = async ({ email, password }: auth) => {
   // Login through supabase
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -25,33 +26,37 @@ export const signIn = async ({ email, password }: auth) => {
   return { user, session, error };
 };
 
-// export const signUpNewUser = async ({ email, password, displayName, fullName }: auth) => {
-//   const { data, error } = await supabase.auth.signUp({
-//     email: email,
-//     password: password,
-//     options: {
-//       data: {
-//         display_name: displayName,
-//         full_name: fullName
-//       }
-//     },
-//   });
+// Create new user
+export const signUpNewUser = async ({ email, password, displayName, fullName }: auth) => {
+  // Sign up through supabase
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        display_name: displayName,
+        full_name: fullName
+      }
+    },
+  });
 
-//   if (error) {
-//     console.error('Error: ', error);
+  if (error) {
+    console.error('Error: ', error);
 
-//     return { data: null, error };
-//   }
+    return { data: null, error };
+  }
 
-//   return { data, error: null }
-// }
+  return { data, error: null }
+}
 
+// User logout
 export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
 
   return error;
 };
 
+//Get user session
 export const getUserSession = async () => {
   const { data, error } = await supabase.auth.getSession();
 
