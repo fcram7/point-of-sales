@@ -56,6 +56,13 @@ export const Navbar = () => {
     router.push('/dashboard/all-orders');
   }
 
+  const onUserManagementHandler = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    router.push('/dashboard/user-management');
+  }
+
   const onLogoutHandler = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -109,6 +116,11 @@ export const Navbar = () => {
                         <li>
                           <NavigationMenuLink asChild onClick={onAllOrdersHandler}>
                             <div className='cursor-pointer xl:text-md'>All Orders</div>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild onClick={onUserManagementHandler}>
+                            <div className='cursor-pointer xl:text-md'>User Management</div>
                           </NavigationMenuLink>
                         </li>
                         <li>
