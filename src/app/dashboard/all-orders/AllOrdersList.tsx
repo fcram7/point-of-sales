@@ -17,6 +17,7 @@ import { CheckUserSession } from '@/components/CheckUserSession';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { OrderRecap } from '@/utils/pdf/PdfGenerator';
 import Link from 'next/link';
+import { BackToMenu } from '@/components/BackToMenu';
 
 interface allOrdersItem {
   order_id: string;
@@ -69,9 +70,7 @@ export const AllOrdersList = () => {
               </PDFDownloadLink>
             </Button>
           </div>
-
-          <Link className='xl:text-xl opacity-50 transition-opacity ease-in-out duration-200 hover:opacity-100' href={`/dashboard`}>Back to menu</Link>
-
+          <BackToMenu />
           <div className="order-date-selector-container flex gap-4 items-center mt-4">
             <span >Select order date: </span>
             <Popover>

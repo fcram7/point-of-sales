@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { getItemData } from '@/api/db';
 import Link from 'next/link';
+import { BackToMenu } from '@/components/BackToMenu';
 
 interface item {
   id: number;
@@ -60,7 +61,7 @@ export const AllMenusList = () => {
   return (
     <div className='all-menus-list'>
       <div className='all-menus-list__content'>
-        <Link className='xl:text-xl' href={`/dashboard`}>Back to menu</Link>
+        <BackToMenu />
         <Accordion type='single' collapsible className='w-full mt-10'>
           <AccordionItem value='drinks-category'>
             <AccordionTrigger className='xl:text-xl'>Drinks Menu</AccordionTrigger>

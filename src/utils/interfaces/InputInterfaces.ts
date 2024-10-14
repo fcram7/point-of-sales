@@ -18,6 +18,25 @@ export interface loginInputProps {
   onChangeHandler?: ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
+//new user input props
+export interface newUserInputProps {
+  field: ControllerRenderProps<
+    {
+      fullName: string;
+      username: string;
+      email: string;
+      password: string;
+    },
+    'fullName' | 'username' | 'email' | 'password'
+  >
+  inputLabel: string;
+  inputPlaceholder: string;
+  inputType: HTMLInputTypeAttribute;
+  disabled: boolean;
+  required: boolean;
+  onChangeHandler?: ChangeEventHandler<HTMLInputElement> | undefined;
+}
+
 //order input props
 export interface orderInputProps {
   field: ControllerRenderProps<

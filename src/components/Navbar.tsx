@@ -56,6 +56,13 @@ export const Navbar = () => {
     router.push('/dashboard/all-orders');
   }
 
+  const onUserManagementHandler = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    router.push('/dashboard/user-management');
+  }
+
   const onLogoutHandler = async (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -71,7 +78,13 @@ export const Navbar = () => {
       });
       router.push('/');
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      return toast({
+        title: `Oops! There's an error ${err}`,
+        action: (
+          <ToastAction altText='Click to close notification'>Close</ToastAction>
+        ),
+      });
     }
   };
 
@@ -88,7 +101,7 @@ export const Navbar = () => {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>
-                    {loggedInUser.email === 'superadmin@simplepos.com'
+                    {loggedInUser.email === process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL
                       ? 'Welcome, superadmin'
                       : null}
                   </NavigationMenuTrigger>
@@ -106,6 +119,11 @@ export const Navbar = () => {
                           </NavigationMenuLink>
                         </li>
                         <li>
+                          <NavigationMenuLink asChild onClick={onUserManagementHandler}>
+                            <div className='cursor-pointer xl:text-md'>User Management</div>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
                           <NavigationMenuLink asChild onClick={onLogoutHandler}>
                             <div className='cursor-pointer xl:text-md'>Logout</div>
                           </NavigationMenuLink>
@@ -118,7 +136,7 @@ export const Navbar = () => {
             </NavigationMenu>
           </>
         ) : (
-          <Button disabled>No Login Detected</Button>
+          <p className='py-2 xl:text-md opacity-50'>No Login Detected</p>
         )}
       </nav>
     </header>
