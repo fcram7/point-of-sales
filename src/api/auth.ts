@@ -3,7 +3,7 @@ import { supabase } from './config';
 interface auth {
   email: string;
   password: string;
-  displayName?: string;
+  userName?: string;
   fullName?: string;
 }
 
@@ -27,18 +27,44 @@ export const signIn = async ({ email, password }: auth) => {
 };
 
 // Create new user
-export const signUpNewUser = async ({ email, password, displayName, fullName }: auth) => {
+export const signUpNewUser = async ({
+  email,
+  password,
+  userName,
+  fullName,
+}: auth) => {
   // Sign up through supabase
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
     options: {
       data: {
-        display_name: displayName,
-        full_name: fullName
-      }
+        user_name: userName,
+        full_name: fullName,
+      },
     },
   });
+
+  const { data: userData, error: userError } = await supabase
+    .from('users')
+    .insert({
+      email: email,
+      username: userName,
+    })
+    .select();
+
+  if (error) {
+    console.error('Error: ', error);
+
+    return { data: null, error, userError };
+  }
+
+  return { data, userData, error: null, userError: null };
+};
+
+// Get all user data
+export const getUser = async () => {
+  const { data, error } = await supabase.from('users').select('*');
 
   if (error) {
     console.error('Error: ', error);
@@ -46,8 +72,8 @@ export const signUpNewUser = async ({ email, password, displayName, fullName }: 
     return { data: null, error };
   }
 
-  return { data, error: null }
-}
+  return { data, error: null };
+};
 
 // User logout
 export const signOut = async () => {
