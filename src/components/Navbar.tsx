@@ -1,7 +1,6 @@
 'use client';
 
 import { MouseEvent, useEffect, useState } from 'react';
-import { Button } from './ui/button';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/api/config';
 import { signOut } from '@/api/auth';
@@ -101,26 +100,30 @@ export const Navbar = () => {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>
-                    {loggedInUser.email === process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL
-                      ? 'Welcome, superadmin'
-                      : null}
+                    Welcome, {loggedInUser.email}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className='navbar-section__navmenu-content w-48'>
                       <ul className='navbar-section__navmenu-link-container px-4 py-2 grid gap-4'>
-                        <li>
-                          <NavigationMenuLink asChild onClick={onAllMenusHandler}>
-                            <div className='cursor-pointer xl:text-md'>All Menus</div>
-                          </NavigationMenuLink>
-                        </li>
+                        {loggedInUser.email === process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL
+                          ? (
+                            <>
+                              <li>
+                                <NavigationMenuLink asChild onClick={onUserManagementHandler}>
+                                  <div className='cursor-pointer xl:text-md'>User Management</div>
+                                </NavigationMenuLink>
+                              </li>
+                              <li>
+                                <NavigationMenuLink asChild onClick={onAllMenusHandler}>
+                                  <div className='cursor-pointer xl:text-md'>All Menus</div>
+                                </NavigationMenuLink>
+                              </li>
+                            </>
+                          ) : null
+                        }
                         <li>
                           <NavigationMenuLink asChild onClick={onAllOrdersHandler}>
                             <div className='cursor-pointer xl:text-md'>All Orders</div>
-                          </NavigationMenuLink>
-                        </li>
-                        <li>
-                          <NavigationMenuLink asChild onClick={onUserManagementHandler}>
-                            <div className='cursor-pointer xl:text-md'>User Management</div>
                           </NavigationMenuLink>
                         </li>
                         <li>
