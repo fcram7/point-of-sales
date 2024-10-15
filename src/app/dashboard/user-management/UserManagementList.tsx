@@ -1,6 +1,6 @@
 'use client';
 
-import { getUser, signUpNewUser } from '@/api/auth';
+import { getUser, getUserSession, signUpNewUser } from '@/api/auth';
 import { BackToMenu } from '@/components/BackToMenu';
 import { CheckUserSession } from '@/components/CheckUserSession';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,9 @@ import { z } from 'zod';
 import { newUserSchema } from '@/utils/schema/NewUserSchema';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '@/api/config';
+import { useRouter } from 'next/navigation';
 
 interface user {
   email: string;
@@ -19,8 +22,15 @@ interface user {
 }
 
 export const UserManagementList = () => {
+  const [loggedInUser, setLoggedInUser] = useState<string | undefined>(undefined);
   const [userListData, setUserListData] = useState<user[]>([]);
   const { toast } = useToast();
+  const router = useRouter();
+
+  const getSession = async () => {
+    const { data } = await getUserSession();
+    setLoggedInUser(data?.session?.user.email);
+  }
 
   const getUserData = async () => {
     const { data, error } = await getUser();
@@ -62,7 +72,12 @@ export const UserManagementList = () => {
 
   useEffect(() => {
     getUserData();
-  }, [userListData]);
+    getSession();
+  }, []);
+
+  if (loggedInUser !== process.env.NEXT_PUBLIC_SUPERADMIN_EMAIL) {
+    router.push('/dashboard');
+  }
 
   return (
     <CheckUserSession routeTo='/dashboard/user-management'>
@@ -110,4 +125,5 @@ export const UserManagementList = () => {
       </div>
     </CheckUserSession>
   );
+
 };
