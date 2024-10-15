@@ -33,7 +33,7 @@ export const UserManagementList = () => {
   };
 
   const createNewUserSubmitHandler = async (values: z.infer<typeof newUserSchema>) => {
-    const { data, userData, error, userError } = await signUpNewUser({
+    const { error, userError } = await signUpNewUser({
       email: values.email,
       fullName: values.fullName,
       userName: values.username,
@@ -62,7 +62,7 @@ export const UserManagementList = () => {
 
   useEffect(() => {
     getUserData();
-  }, []);
+  }, [userListData]);
 
   return (
     <CheckUserSession routeTo='/dashboard/user-management'>
@@ -86,7 +86,7 @@ export const UserManagementList = () => {
           </div>
 
           <Drawer>
-            <DrawerTrigger className='fixed user-management-list__add-user-btn bottom-5 right-10'>
+            <DrawerTrigger className='fixed user-management-list__add-user-btn bottom-5 right-10' asChild>
               <Button>
                 Add New User
               </Button>
