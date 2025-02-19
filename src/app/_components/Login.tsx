@@ -62,6 +62,7 @@ export const Login =  () => {
           <div className='login-section__content p-6'>
             <Form {...form}>
               <form
+                method='post'
                 onSubmit={form.handleSubmit(onSubmitHandler)}
                 className='space-y-8'
               >
